@@ -5,6 +5,8 @@ using namespace std;
 int main() {
   
   		unsigned tables = 0;
+  		unsigned row = 0;
+  		unsigned column = 0;
 		string  in;
 		string line,value;
 		ifstream myfile ("sampleDocument.txt");
@@ -34,9 +36,12 @@ int main() {
 				}
 			case '\t':
 			    if (tables) {
-				value += "<td>";
+			    	if( row <= 1) {
+			    		column++;
+			    	}
+					value += "<td>";
 			    } else {
-				value += '\t';
+					value += '\t';
 			    }
 			    break;
 			case '\r': // BREAK or BLOCK
@@ -60,9 +65,22 @@ int main() {
 				    break;*/
 				 case '|':
                                     if (tables) {
-                                        value += "<tr><td>";
-                                        break;
+                                    	int iterator_ = 1;
+                                    	while (*(i + iterator_) == ' ') {
+                                    		iterator_++;
+                                    	}
+                                    	if( *(i+1) == ' ' && *(i+iterator_) == '|' && column == 2) {
+                                    		i = i + iterator_;
+                                    		//cout<<"ignoring tow";
+                                    		break;
+                                    	} else {
+                                    		row++;
+                                        	value += "<tr><td>";
+                                        	break;
+                                    	}	
                                     } else {
+                                    	row = 1;
+                                    	column = 1;
                                         value += "\n<table border=1><tr><td>";
                                             ++tables;
                                             break;
